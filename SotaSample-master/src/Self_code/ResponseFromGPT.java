@@ -7,10 +7,16 @@ import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import io.github.cdimascio.dotenv.Dotenv;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+
 
 
 public class ResponseFromGPT {
     public static void main(String[] args) {
+
     }
 
     public static String outputResponse(String input_content) {
@@ -22,11 +28,26 @@ public class ResponseFromGPT {
         OkHttpClient client = new OkHttpClient();
 
         // プロンプト作成
+        Path file = Paths.get("./Self_code/Prompt.txt");
+        String promptAll = "";
+        try {
+            List<String> promptList = Files.readAllLines(file);
+            System.out.println(promptList);
+            for (int i=0; i < promptList.size(); i++){
+                String promptElem = promptList.get(i);
+                //promptAll += promptElem;
+            }
+        } catch(IOException ex) {
+			ex.printStackTrace();
+            //System.out.println("Error");
+		}
+
         JsonObject json = new JsonObject();
         json.addProperty("model", "gpt-3.5-turbo-0613");
         json.add("messages", new JsonArray());
         //json.get("messages").getAsJsonArray().add(buildMessage("system", "You are a helpful assistant."));
         //json.get("messages").getAsJsonArray().add(buildMessage("user", "Translate the following English text to French: '{text}'"));
+        json.get("messages").getAsJsonArray().add(buildMessage("system", promptAll));
         json.get("messages").getAsJsonArray().add(buildMessage("user", input_content));
 
         // 設定
