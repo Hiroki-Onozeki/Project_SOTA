@@ -15,7 +15,7 @@ import java.util.List;
 
 
 
-public class ChatGPT {
+public class testChatGPT {
     public static void main(String[] args) {
         // APIKey
         Dotenv dotenv = null;
