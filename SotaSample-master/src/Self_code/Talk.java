@@ -1,12 +1,13 @@
 package Self_code;
 
-import jp.vstone.RobotLib.CPlayWave;
-import jp.vstone.RobotLib.CRobotMem;
-import jp.vstone.RobotLib.CSotaMotion;
+import jp.vstone.sotatalk.MotionAsSotaWish;
 import jp.vstone.sotatalk.SpeechRecog;
 import jp.vstone.sotatalk.SpeechRecog.RecogResult;
 import jp.vstone.sotatalk.TextToSpeechSota;
 import Self_code.ResponseFromGPT;
+import java.awt.Color;
+import jp.vstone.RobotLib.*;
+
 
 public class Talk {
     static final String TAG = "Talk";
@@ -16,20 +17,36 @@ public class Talk {
 		//Sota用モーション制御クラス
 		CSotaMotion motion = new CSotaMotion(mem);
 		SpeechRecog recog = new SpeechRecog(motion);
-        ChatGPT gpt = new ChatGPT();
+
+		CRobotPose pose;
+		MotionAsSotaWish tenplateMotion;
 		
 		if(mem.Connect()){
 			//Sota仕様にVSMDを初期化
 			motion.InitRobot_Sota();
 			while(true){
+				pose = new CRobotPose();
+            	pose.setLED_Sota(Color.BLACK, Color.BLACK, 255, Color.BLACK);			
+				CRobotUtil.Log(TAG, "setLED:" + motion.play(pose,20000));;
 				RecogResult result = recog.getRecognition(20000);
-				if(result.recognized){
 
-                    // GetResonse
+				if(result.recognized){
+                    // GPTを使用して応答を得る
                     String user_utt = result.getBasicResult();
-                    //String input_content = "あなたは誰ですか？";
+
+					//　初期化
+					if(user_utt.contains("はじめまして")){
+						
+					}
                     String response = ResponseFromGPT.outputResponse(user_utt);
-					CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(response),true);
+					//CPlayWave.PlayWave(TextToSpeechSota.getTTSFile(response),true);
+
+					// 発話時間に合わせてランダムにモーションをつける
+					tenplateMotion = new MotionAsSotaWish(motion);
+					tenplateMotion.setLEDColorMot(Color.MAGENTA);
+    				tenplateMotion.Say(response);
+            		motion.waitEndinterpAll();
+
 					if(result.getBasicResult().contains("おわり")){		
 						CPlayWave.PlayWave(TextToSpeechSota.getTTSFile("終了するよ"),true);
 						break;

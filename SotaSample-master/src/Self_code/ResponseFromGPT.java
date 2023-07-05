@@ -10,13 +10,16 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 
 
 public class ResponseFromGPT {
+    public static List<String> dialogue_context = new ArrayList<String>();
+    public static List<Boolean> sepaker_list = new ArrayList<Boolean>();
     public static void main(String[] args) {
-
+        System.out.println("!!!!!!");
     }
 
     public static String outputResponse(String input_content) {
@@ -32,21 +35,21 @@ public class ResponseFromGPT {
         String promptAll = "";
         try {
             List<String> promptList = Files.readAllLines(file);
-            System.out.println(promptList);
             for (int i=0; i < promptList.size(); i++){
                 String promptElem = promptList.get(i);
-                //promptAll += promptElem;
+                promptAll += promptElem;
             }
         } catch(IOException ex) {
 			ex.printStackTrace();
-            //System.out.println("Error");
 		}
+
+        // 対話履歴追加
+        addDialogueContext(input_content, true);
+        System.out.println(dialogue_context);
 
         JsonObject json = new JsonObject();
         json.addProperty("model", "gpt-3.5-turbo-0613");
         json.add("messages", new JsonArray());
-        //json.get("messages").getAsJsonArray().add(buildMessage("system", "You are a helpful assistant."));
-        //json.get("messages").getAsJsonArray().add(buildMessage("user", "Translate the following English text to French: '{text}'"));
         json.get("messages").getAsJsonArray().add(buildMessage("system", promptAll));
         json.get("messages").getAsJsonArray().add(buildMessage("user", input_content));
 
@@ -65,8 +68,8 @@ public class ResponseFromGPT {
         // GPTの出力を文字列にし、contentのみを取得して出力する
         try {
             Response response = client.newCall(request).execute();
-            String content = extractContentFromOutput(response.body().string());
-            System.out.println(content);
+            String content = extractContentFromOutput(response.body().string()); 
+            addDialogueContext(input_content, true);
             return content;
         } catch (IOException e) {
             e.printStackTrace();
@@ -95,5 +98,14 @@ public class ResponseFromGPT {
                 .get("content").getAsString();
 
         return content;
+    }
+
+    public static void initDilogueContext() {
+        dialogue_context.clear();
+    }
+
+    public static void addDialogueContext(String utt, Boolean isUser) {
+        dialogue_context.add(utt);
+        sepaker_list.add(isUser);
     }
 }
