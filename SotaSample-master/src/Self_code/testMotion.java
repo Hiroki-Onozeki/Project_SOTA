@@ -38,6 +38,7 @@ public class testMotion {
 			//遷移時間1000msecで動作開始。
 			CRobotUtil.Log(TAG, "play:" + motion.play(pose,5000));
 			//補間完了まで待つ
+            motion.waitEndinterpAll();
 
 
             // テンプレートモーション確認
@@ -45,12 +46,6 @@ public class testMotion {
             tenplateMotion.call_4s_A();
             //CRobotUtil.Log(TAG, "play:" + motionRobo.play(tenplateMotion,1000));
             
-
-            // say
-            tenplateMotion = new MotionAsSotaWish(motion);
-            tenplateMotion.Say("おはようございます。今日はどういった御用でしょうか？");
-            //CRobotUtil.Log(TAG, "play:" + motionRobo.play(tenplateMotion,1000));
-            motion.waitEndinterpAll();
         }
     }
 }

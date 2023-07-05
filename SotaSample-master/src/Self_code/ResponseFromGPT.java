@@ -51,6 +51,15 @@ public class ResponseFromGPT {
         json.addProperty("model", "gpt-3.5-turbo-0613");
         json.add("messages", new JsonArray());
         json.get("messages").getAsJsonArray().add(buildMessage("system", promptAll));
+        for(int i=0; i < dialogue_context.size(); i++){
+            String input_utt = dialogue_context.get(i);
+            Boolean isUser = sepaker_list.get(i);
+            if(isUser == true){
+                json.get("messages").getAsJsonArray().add(buildMessage("user", input_utt));
+            }else{
+                json.get("messages").getAsJsonArray().add(buildMessage("assistant", input_utt));
+            }
+        }
         json.get("messages").getAsJsonArray().add(buildMessage("user", input_content));
 
         // 設定
@@ -68,9 +77,10 @@ public class ResponseFromGPT {
         // GPTの出力を文字列にし、contentのみを取得して出力する
         try {
             Response response = client.newCall(request).execute();
-            String content = extractContentFromOutput(response.body().string()); 
-            addDialogueContext(input_content, true);
-            return content;
+            String response_content = extractContentFromOutput(response.body().string()); 
+            addDialogueContext(response_content, false);
+            System.out.println(response_content);
+            return response_content;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -96,7 +106,6 @@ public class ResponseFromGPT {
                 .get(0).getAsJsonObject()
                 .getAsJsonObject("message")
                 .get("content").getAsString();
-
         return content;
     }
 
