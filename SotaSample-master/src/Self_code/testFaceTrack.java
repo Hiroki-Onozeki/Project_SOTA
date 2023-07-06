@@ -6,14 +6,15 @@ import jp.vstone.sotatalk.SpeechRecog.RecogResult;
 import jp.vstone.sotatalk.TextToSpeechSota;
 import Self_code.ResponseFromGPT;
 import java.awt.Color;
+import java.util.HashMap;
+import java.util.Map;
+
 import jp.vstone.RobotLib.*;
 import jp.vstone.camera.CRoboCamera;
 import jp.vstone.camera.FaceDetectResult;
 
-
-public class Talk {
-    static final String TAG = "Talk";
-	public static void main(String[] args) {
+public class testFaceTrack {
+    public static void main(String[] args) {
 		//VSMDと通信ソケット・メモリアクセス用クラス
 		CRobotMem mem = new CRobotMem();
 		//Sota用モーション制御クラス
@@ -47,6 +48,10 @@ public class Talk {
                         pose.SetPose(new Byte[] {1   ,2   ,3   ,4   ,5   ,6   ,7   ,8}  //id
                                     ,  new Short[]{220, -442, -907, 25, 945,   -103,  99, -253}   //target pos
                                     );
+                        //pose.setLED_Sota(Color.RED, Color.RED, 255, Color.BLUE);
+                        //Map<Byte, Short> colorResult = pose.getLed();
+                        //System.out.println(colorResult);
+                        //pose.SetLed(new Byte[] {0, 1, 2, 8, 9, 10, 11, 12, 13, 14}, new Short[]{0, 255, 255, 255, 0, 0, 255, 0, 0, 255});
                         motion.play(pose,1000);
                         motion.waitEndinterpAll();
 
