@@ -5,7 +5,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.Arrays;
-import jp.vstone.RobotLib.*;
+import jp.vstone.RobotLib.*;    //CRobotUtil
 import jp.vstone.sotatalk.MotionAsSotaWish;
 
 
@@ -33,11 +33,30 @@ public class testMotion {
 			motion.ServoOn();
 
             // 色確認
+			CRobotUtil.Log(TAG, "Color GRAY Set");
             pose = new CRobotPose();
             pose.setLED_Sota(Color.GRAY, Color.GRAY, 255, Color.MAGENTA);			
+			motion.play(pose, 1000);
+			motion.waitEndinterpAll();
+
+			CRobotUtil.Log(TAG, "5 second wait");
+			CRobotUtil.wait(5000);
+			
+
+			CRobotUtil.Log(TAG, "CoLor RED Set");
+			pose.setLED_Sota(Color.RED, Color.RED, 255, Color.RED);
+			motion.play(pose, 1000);
+			motion.waitEndinterpAll();
+
+			try {
+			    Thread.sleep(5000); // 5秒(1万ミリ秒)間だけ処理を止める
+            } catch (InterruptedException e) {
+            }
+
 			//遷移時間1000msecで動作開始。
 			CRobotUtil.Log(TAG, "play:" + motion.play(pose,5000));
 			//補間完了まで待つ
+            motion.waitEndinterpAll();
 
 
             // テンプレートモーション確認
@@ -45,12 +64,6 @@ public class testMotion {
             tenplateMotion.call_4s_C11();
             //CRobotUtil.Log(TAG, "play:" + motionRobo.play(tenplateMotion,1000));
             
-
-            // say
-            tenplateMotion = new MotionAsSotaWish(motion);
-            tenplateMotion.Say("おはようございます。今日はどういった御用でしょうか？");
-            //CRobotUtil.Log(TAG, "play:" + motionRobo.play(tenplateMotion,1000));
-            motion.waitEndinterpAll();
         }
     }
 }
