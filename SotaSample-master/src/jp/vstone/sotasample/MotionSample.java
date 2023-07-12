@@ -49,7 +49,7 @@ public class MotionSample {
 			//一部の軸を指定して動作
 			//CSotaMotionの定数を利用してID指定する場合
 			pose = new CRobotPose();
-			pose.SetPose(new Byte[] {CSotaMotion.SV_HEAD_R, CSotaMotion.SV_L_SHOULDER,CSotaMotion.SV_L_ELBOW,CSotaMotion.SV_R_ELBOW}	//id
+			pose.SetPose(new Byte[] {CSotaMotion.SV_HEAD_R, CSotaMotion.SV_L_SHOULDER, CSotaMotion.SV_L_ELBOW, CSotaMotion.SV_R_ELBOW}	//id
 						,  new Short[]{200, 700 ,-200,200}	//target pos
 			);
 			pose.setLED_Sota(Color.GREEN, Color.GREEN, 255, Color.GREEN);

@@ -1,5 +1,6 @@
 package Self_code;
 
+import java.util.Scanner;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
@@ -7,7 +8,7 @@ import java.io.FileReader;
 import java.util.Arrays;
 import jp.vstone.RobotLib.*;    //CRobotUtil
 import jp.vstone.sotatalk.MotionAsSotaWish;
-
+import jp.vstone.sotatalk.TextToSpeechSota;
 
 public class testMotion {
     static final String TAG = "MotionSample";
@@ -22,6 +23,11 @@ public class testMotion {
 
         //CRobotMotion motionRobo;
         MotionAsSotaWish tenplateMotion;
+
+		MotionAsSotaWish wish = new MotionAsSotaWish(motion);
+
+		Scanner scanner = new Scanner(System.in);
+
 		
 		if(mem.Connect()){
 			//Sota仕様にVSMDを初期化
@@ -32,37 +38,186 @@ public class testMotion {
 			CRobotUtil.Log(TAG, "Servo On");
 			motion.ServoOn();
 
-            // 色確認
-			CRobotUtil.Log(TAG, "Color GRAY Set");
-            pose = new CRobotPose();
-            pose.setLED_Sota(Color.GRAY, Color.GRAY, 255, Color.MAGENTA);			
-			motion.play(pose, 1000);
-			motion.waitEndinterpAll();
+			while(true){
+				System.out.println("call,hello,low,presen,talk,end");
+    			String talk_class = scanner.next();
 
-			CRobotUtil.Log(TAG, "5 second wait");
-			CRobotUtil.wait(5000);
-			
+				// テンプレートモーション確認
+				if(talk_class.equals("call")){
+					wish.setLEDColorMot(Color.GREEN); // LEDの色を緑に設定
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("call_4s_A"),true);
+					// wish.Say("こんにちは。これはcall_4s_Aです", "");
+					wish.call_4s_A();
 
-			CRobotUtil.Log(TAG, "CoLor RED Set");
-			pose.setLED_Sota(Color.RED, Color.RED, 255, Color.RED);
-			motion.play(pose, 1000);
-			motion.waitEndinterpAll();
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("call_4s_B"),true);
+					// wish.Say("こんにちは。これはcall_4s_Bです");
+					wish.call_4s_B();
 
-			try {
-			    Thread.sleep(5000); // 5秒(1万ミリ秒)間だけ処理を止める
-            } catch (InterruptedException e) {
-            }
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("call_4s_C"),true);
+					// wish.Say("こんにちは。これはcall_4s_Cです");
+					wish.call_4s_C();
 
-			//遷移時間1000msecで動作開始。
-			CRobotUtil.Log(TAG, "play:" + motion.play(pose,5000));
-			//補間完了まで待つ
-            motion.waitEndinterpAll();
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("call_4s_C1"),true);
+					// wish.Say("こんにちは。これはcall_4s_C1です");
+					wish.call_4s_C1();
+
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("call_4s_C11"),true);
+					// wish.Say("こんにちは。これはcall_4s_C11です");
+					wish.call_4s_C11();
+				}else if(talk_class.equals("hello")){
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("hello_2s_1"),true);
+					// wish.Say("こんにちは。これはhello_2s_1です");
+					wish.hello_2s_1();
+					
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("hello_2s_2"),true);
+					// wish.Say("こんにちは。これはhello_2s_2です");
+					wish.hello_2s_2();
+
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("hello_2s_3"),true);
+					// wish.Say("こんにちは。これはhello_2s_3です");
+					wish.hello_2s_3();
+
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("hello_2s_4"),true);
+					// wish.Say("こんにちは。これはhello_2s_4です");
+					wish.hello_2s_4();
+				}else if(talk_class.equals("low")){
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("low_2s_1"),true);
+					// wish.Say("こんにちは。これはlow_2s_1です");
+					wish.low_2s_1();
+
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("low_2s_2s"),true);
+					// wish.Say("こんにちは。これはlow_2s_2sです");
+					wish.low_2s_2s();
+					
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("low_2s_C"),true);
+					// wish.Say("こんにちは。これはlow_2s_Cです");
+					wish.low_2s_C();
+					
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("low_2s_C1"),true);
+					// wish.Say("こんにちは。これはlow_2s_C1です");
+					wish.low_2s_C1();
+					
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("low_4s_1"),true);
+					// wish.Say("こんにちは。これはlow_4s_1です");
+					wish.low_4s_1();
+					
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("low_4s_1"),true);
+					// wish.Say("こんにちは。これはlow_4s_2です");
+					wish.low_4s_2();
+					
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("low_4s_3"),true);
+					// wish.Say("こんにちは。これはlow_4s_3です");
+					wish.low_4s_3();
+					
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("low_4s_f1"),true);
+					// wish.Say("こんにちは。これはlow_4s_f1です");
+					wish.low_4s_f1();
+					
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("low_4s_f11"),true);
+					// wish.Say("こんにちは。これはlow_4s_f11です");
+					wish.low_4s_f11();
+
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("low_6s_1"),true);
+					// wish.Say("こんにちは。これはlow_6s_1です");
+					wish.low_6s_1();
+
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("low_6s_2"),true);
+					// wish.Say("こんにちは。これはlow_6s_2です");
+					wish.low_6s_2();
+
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("low_6s_f1"),true);
+					// wish.Say("こんにちは。これはlow_6s_f1です");
+					wish.low_6s_f1();
+				}else if(talk_class.equals("presen")){
+					wish.Say("こんにちは。これはpresen_n_2s_aです");
+					// wish.presen_n_2s_a();
+
+					// wish.Say("こんにちは。これはpresen_n_2s_bです");
+					// wish.presen_n_2s_b();
+					
+					// wish.Say("こんにちは。これはpresen_n_4s_aです");
+					// wish.presen_n_4s_a();
+					
+					// wish.Say("こんにちは。これはpresen_n_4s_bです");
+					// wish.presen_n_4s_b();
+
+					// wish.Say("こんにちは。これはpresen_n_6s_aです");
+					// wish.presen_n_6s_a();
+					
+					// wish.Say("こんにちは。これはpresen_n_6s_bです");
+					// wish.presen_n_6s_b();
 
 
-            // テンプレートモーション確認
-            tenplateMotion = new MotionAsSotaWish(motion);
-            tenplateMotion.call_4s_C11();
-            //CRobotUtil.Log(TAG, "play:" + motionRobo.play(tenplateMotion,1000));
+					// wish.Say("こんにちは。これはpresen_u_2s_aです");
+					// wish.presen_u_2s_a();
+
+					// wish.Say("こんにちは。これはpresen_u_2s_bです");
+					// wish.presen_u_2s_b();
+					
+					// wish.Say("こんにちは。これはpresen_u_4s_aです");
+					// wish.presen_u_4s_a();
+					
+					// wish.Say("こんにちは。これはpresen_u_4s_bです");
+					// wish.presen_u_4s_b();
+
+					// wish.Say("こんにちは。これはpresen_u_6s_aです");
+					// wish.presen_u_6s_a();
+					
+					// wish.Say("こんにちは。これはpresen_u_6s_bです");
+					// wish.presen_u_6s_b();
+				}else if(talk_class.equals("talk")){
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("talk_2s_1"),true);
+					// wish.Say("こんにちは。これはtalk_2s_1です");
+					wish.talk_2s_1();
+
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("talk_2s_2"),true);					
+					// wish.Say("こんにちは。これはtalk_2s_2です");
+					wish.talk_2s_2();
+					
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("talk_2s_3"),true);
+					// wish.Say("こんにちは。これはtalk_2s_3です");
+					wish.talk_2s_3();
+
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("talk_2s_4"),true);
+					// wish.Say("こんにちは。これはtalk_2s_4です");
+					wish.talk_2s_4();
+					
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("talk_4s_1"),true);
+					// wish.Say("こんにちは。これはtalk_4s_1です");
+					wish.talk_4s_1();
+					
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("talk_4s_2"),true);
+					// wish.Say("こんにちは。これはtalk_4s_2です");
+					wish.talk_4s_2();
+					
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("talk_4s_3"),true);
+					// wish.Say("こんにちは。これはtalk_4s_3です");
+					wish.talk_4s_3();
+					
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("talk_4s_4"),true);
+					// wish.Say("こんにちは。これはtalk_4s_4です");
+					wish.talk_4s_4();
+					
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("talk_4s_5"),true);
+					// wish.Say("こんにちは。これはtalk_4s_5です");
+					wish.talk_4s_5();
+					
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("talk_6s_1"),true);
+					// wish.Say("こんにちは。これはtalk_6s_1です");
+					wish.talk_6s_1();
+
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("talk_6s_2"),true);
+					// wish.Say("こんにちは。これはtalk_6s_2です");
+					wish.talk_6s_2();
+
+					CPlayWave.PlayWave(TextToSpeechSota.getTTS("talk_6s_3"),true);
+					// wish.Say("こんにちは。これはtalk_6s_3です");
+					wish.talk_6s_3();
+				}else{
+					break;
+				}
+			}
+				
             
         }
     }
