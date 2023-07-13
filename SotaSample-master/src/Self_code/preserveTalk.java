@@ -6,14 +6,11 @@ import jp.vstone.sotatalk.SpeechRecog.RecogResult;
 import jp.vstone.sotatalk.TextToSpeechSota;
 import Self_code.ResponseFromGPT;
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.Random;
 import jp.vstone.RobotLib.*;
 import jp.vstone.camera.CRoboCamera;
 import jp.vstone.camera.FaceDetectResult;
 
-
-public class Talk {
+public class preserveTalk {
     static final String TAG = "Talk";
 	public static void main(String[] args) {
 		//VSMDと通信ソケット・メモリアクセス用クラス
@@ -26,15 +23,6 @@ public class Talk {
 		MotionAsSotaWish tenplateMotion;
 		CRoboCamera cam = new CRoboCamera("/dev/video0", motion);
         tenplateMotion = new MotionAsSotaWish(motion);
-
-        // 顔を認識したら話しかけてくる用の色々
-        Boolean is_meet = true;
-        ArrayList<String> hello_contents_list = new ArrayList<String>(5);
-        hello_contents_list.add("こんにちは。僕とお話しようよ！");
-        hello_contents_list.add("僕の名前はSOTAだよ。");
-        hello_contents_list.add("おーい、聞こえてる？");
-        hello_contents_list.add("一緒におしゃべりしようよ。");
-        hello_contents_list.add("ヘイ！そこのイケメン！");
 
 		if(mem.Connect()){
 			//Sota仕様にVSMDを初期化
@@ -49,16 +37,8 @@ public class Talk {
                 FaceDetectResult result_faceDetect = cam.getDetectResult();
 				if(result_faceDetect.isDetect()){
 
-                    // 初期状態なら話しかかけてくる
-                    if(is_meet == true){
-                        Random rnd = new Random();
-                        int index = rnd.nextInt(hello_contents_list.size());
-                        String hello_content = hello_contents_list.get(index);
-                        tenplateMotion.Say(hello_content, MotionAsSotaWish.MOTION_TYPE_HELLO);
-                    }
-
-                    // 音声認識
                     tenplateMotion.setLEDColorMot(Color.GREEN);
+                    // 音声認識
                     RecogResult result = recog.getRecognition(20000);
                     if(result.recognized){
 
@@ -77,8 +57,6 @@ public class Talk {
                         //　初期化
                         if(user_utt.contains("はじめまして")){
                             ResponseFromGPT.initDilogueContext();
-                            is_meet = true;
-                            continue;
                         }
                         // 終了
                         if(user_utt.contains("終了して")){
@@ -93,7 +71,6 @@ public class Talk {
                         // 応答から感情を抽出する、なければ「無」にする
                         String response = ResponseFromGPT.outputResponse(user_utt);
                         String[] responses = response.split(";");
-                        is_meet = false;
                         String response_emotion;
                         String response_content;
                         if(responses.length == 2){
@@ -107,18 +84,23 @@ public class Talk {
 
                         // 感情に合わせたモーション・色で発話する
                         if(response_emotion.contains("嬉")){
+                            // tenplateMotion.setLEDColorMot(Color.YELLOW);
                             tenplateMotion.Say(response_content, MotionAsSotaWish.MOTION_TYPE_CALL);
                             System.out.println("嬉しい");
                         }else if(response_emotion.contains("怒")){
+                            // tenplateMotion.setLEDColorMot(Color.RED);
                             tenplateMotion.Say(response_content, MotionAsSotaWish.MOTION_TYPE_LOW);
                             System.out.println("怒り");
                         }else if(response_emotion.contains("哀")){
+                            // tenplateMotion.setLEDColorMot(Color.BLUE);
                             tenplateMotion.Say(response_content, MotionAsSotaWish.MOTION_TYPE_LOW);
                             System.out.println("悲しい");
                         }else if(response_emotion.contains("楽")){
+                            // tenplateMotion.setLEDColorMot(Color.GREEN);
                             tenplateMotion.Say(response_content, MotionAsSotaWish.MOTION_TYPE_TALK);
                             System.out.println("楽しい");
                         }else{
+                            // tenplateMotion.setLEDColorMot(Color.GRAY);
                             tenplateMotion.Say(response_content, MotionAsSotaWish.MOTION_TYPE_HELLO);
                             System.out.println("ニュートラル");
                         }
