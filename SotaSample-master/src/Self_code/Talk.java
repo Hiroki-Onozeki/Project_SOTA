@@ -58,7 +58,7 @@ public class Talk {
                     }
 
                     // 音声認識
-                    tenplateMotion.setLEDColorMot(Color.GREEN);
+                    tenplateMotion.setLEDColorMot(Color.CYAN);
                     RecogResult result = recog.getRecognition(20000);
                     if(result.recognized){
 

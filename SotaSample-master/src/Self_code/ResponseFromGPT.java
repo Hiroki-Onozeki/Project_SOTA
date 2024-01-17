@@ -48,7 +48,7 @@ public class ResponseFromGPT {
         //System.out.println(dialogue_context);
 
         JsonObject json = new JsonObject();
-        json.addProperty("model", "gpt-3.5-turbo-0613");
+        json.addProperty("model", "gpt-4-1106-preview");
         json.add("messages", new JsonArray());
         json.get("messages").getAsJsonArray().add(buildMessage("system", promptAll));
         for(int i=0; i < dialogue_context.size(); i++){
